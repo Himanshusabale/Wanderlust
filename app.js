@@ -21,7 +21,7 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = "mongodb+srv://sabalehimanshu:PUEIiMdHenMslQj1@cluster0.exrth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // const dbUrl = process.env.ATLASDB_URL;
 
 main()
@@ -42,24 +42,24 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-// const store = MongoStore.create(
-//   {
-//     mongoUrl: dbUrl,
-//     crypto:{
-//       secret : "mysupersecretcode"
-//     },
-//     touchAfter:24 * 3600,
+const store = MongoStore.create(
+  {
+    mongoUrl: MONGO_URL,
+    crypto:{
+      secret : process.env.SECRET,
+    },
+    touchAfter:24 * 3600,
 
-//   }
-// );
+  }
+);
 
-// store.on("error", ()=>{
-//   console.log("ERROR is MONGO SEDDION STORE", err);
-// });
+store.on("error", ()=>{
+  console.log("ERROR is MONGO SEDDION STORE", err);
+});
 
 sessionOptions= {
   // store,
-  secret: "mysupersecretstring", resave: false, saveUninitialized: true, cookie:{ 
+  secret: process.env.SECRET, resave: false, saveUninitialized: true, cookie:{ 
   expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
   maxAge: 7 * 24 * 60 * 1000,
   httpOnly: true 
